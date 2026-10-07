@@ -142,6 +142,13 @@
         .tab.active { color: var(--ink); border-color: var(--accent); }
         .nav-link { color: var(--muted); font-size: .95rem; }
         .nav-link:hover { color: var(--accent); }
+
+        /* CV viewer: PDF pages stacked in a scrollable box */
+        .cv-viewer { height: min(80vh, 820px); overflow-y: auto; background: #e8ebe8; border: 1px solid var(--line);
+                     border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        .cv-viewer canvas { display: block; width: 100%; max-width: 820px; height: auto; background: #fff;
+                            border-radius: 2px; box-shadow: 0 1px 4px rgba(47,59,69,.15); }
+        @media (max-width: 640px) { .cv-viewer { height: 70vh; padding: 8px; gap: 8px; } }
     </style>
 </head>
 <body>
@@ -299,13 +306,20 @@
 
 <!-- ====== 06 CV ====== -->
 <section id="cv" class="py-20 border-t border-line">
-    <div class="card p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6" style="background:var(--accent-soft);border-color:#d3e1de">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
             <p class="eyebrow mb-2">06 / CV</p>
             <h2 class="sec-title font-bold mb-2">Curriculum Vitae</h2>
-            <p class="muted">A full PDF of my academic CV.</p>
+            <p class="muted">Scroll through my CV below, or download the PDF.</p>
         </div>
-        <a href="files/Academic_CV_Arunav_Bordoloi.pdf" class="btn btn-primary self-start md:self-auto px-6 py-3"><i class="fa-solid fa-download"></i> Download CV (PDF)</a>
+        <div class="flex flex-wrap gap-3">
+            <a href="files/Academic_CV_Arunav_Bordoloi.pdf" download class="btn btn-primary"><i class="fa-solid fa-download"></i> Download PDF</a>
+            <a href="files/Academic_CV_Arunav_Bordoloi.pdf" target="_blank" rel="noopener" class="btn btn-ghost"><i class="fa-solid fa-up-right-from-square"></i> Open in new tab</a>
+        </div>
+    </div>
+    <!-- Scrollable CV preview, rendered from the PDF by the script at the bottom of the page -->
+    <div id="cv-viewer" class="cv-viewer" role="region" aria-label="CV preview" tabindex="0">
+        <p class="muted text-sm py-16">Loading CV…</p>
     </div>
 </section>
 </main>
@@ -488,6 +502,51 @@
     document.getElementById("n-invited").textContent = `(${talks.invited.length})`;
     document.getElementById("n-contributed").textContent = `(${talks.contributed.length})`;
     renderTalks("invited");
+
+    // CV viewer: load PDF.js only when the CV section is close to the screen, then draw each page.
+    const CV_URL = "files/Academic_CV_Arunav_Bordoloi.pdf";
+    const PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+    const cvViewer = document.getElementById("cv-viewer");
+    let cvPdf = null, cvWidth = 0;
+    const loadScript = src => new Promise((ok, fail) => {
+        const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = fail; document.head.appendChild(s);
+    });
+    async function renderCV() {
+        const cs = getComputedStyle(cvViewer);
+        const width = Math.min(cvViewer.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), 820);
+        if (Math.abs(width - cvWidth) < 20) return;
+        cvWidth = width;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const first = !cvViewer.querySelector("canvas");   // first draw: show pages as they finish
+        if (first) cvViewer.replaceChildren();
+        const pages = [];
+        for (let n = 1; n <= cvPdf.numPages; n++) {
+            const page = await cvPdf.getPage(n);
+            const viewport = page.getViewport({ scale: width / page.getViewport({ scale: 1 }).width * dpr });
+            const canvas = document.createElement("canvas");
+            canvas.width = viewport.width; canvas.height = viewport.height;
+            canvas.setAttribute("role", "img");
+            canvas.setAttribute("aria-label", `CV page ${n} of ${cvPdf.numPages}`);
+            await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+            if (first) cvViewer.appendChild(canvas); else pages.push(canvas);
+        }
+        if (!first) cvViewer.replaceChildren(...pages);   // redraw after resize: swap in all at once
+    }
+    async function initCV() {
+        try {
+            await loadScript(PDFJS + "pdf.min.js");
+            pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js";
+            cvPdf = await pdfjsLib.getDocument(CV_URL).promise;
+            await renderCV();
+            let t;
+            window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(renderCV, 300); });
+        } catch (e) {
+            cvViewer.innerHTML = `<p class="muted text-sm py-16">The preview couldn't load. <a class="link" href="${CV_URL}">Open the CV (PDF)</a>.</p>`;
+        }
+    }
+    new IntersectionObserver((entries, obs) => {
+        if (entries.some(e => e.isIntersecting)) { obs.disconnect(); initCV(); }
+    }, { rootMargin: "800px" }).observe(cvViewer);
 
     document.getElementById("year").textContent = new Date().getFullYear();
     document.getElementById("menu-btn").onclick = () => {
