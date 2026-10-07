@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arunav Bordoloi – Experimental Quantum Physics</title>
+    <meta name="description" content="Arunav Bordoloi, Postdoctoral Associate at NYU. Hybrid superconductor–semiconductor quantum devices, superconducting qubits, and mesoscopic quantum transport.">
+    <meta name="author" content="Arunav Bordoloi">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /* ====== Colors: change these to restyle the whole site ====== */
+        :root {
+            --bg: #f7f6f2;           /* warm off-white page background */
+            --surface: #ffffff;      /* cards */
+            --hero: #edf1ef;         /* soft sage-grey hero */
+            --ink: #2f3b45;          /* charcoal slate: headings */
+            --text: #3f4852;         /* body text */
+            --muted: #6e7782;
+            --line: #e4e4de;
+            --accent: #4a7a74;       /* muted sage-teal */
+            --accent-dark: #365c57;
+            --accent-soft: #e5eeec;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'IBM Plex Sans', sans-serif; color: var(--text); background: var(--bg); }
+        h1, h2, h3 { font-family: 'Source Serif 4', serif; color: var(--ink); }
+        .mono { font-family: 'IBM Plex Mono', monospace; }
+        .muted { color: var(--muted); }
+        a.link { color: var(--accent); text-decoration: underline; text-decoration-color: transparent; transition: .15s; }
+        a.link:hover { text-decoration-color: currentColor; }
+        section { scroll-margin-top: 72px; }
+        .border-line { border-color: var(--line); }
+
+        /* Hero: light sage gradient with a faint lattice of dots */
+        .hero { background:
+                    radial-gradient(rgba(47,59,69,.07) 1px, transparent 1px) 0 0 / 22px 22px,
+                    linear-gradient(135deg, #f3f5f3 0%, var(--hero) 100%);
+                border-bottom: 1px solid var(--line); }
+        .photo { width: 240px; height: 300px; object-fit: cover; border-radius: 14px;
+                 box-shadow: 12px 12px 0 #d3e1de; }
+        .btn { display: inline-flex; align-items: center; gap: .5rem; padding: .55rem 1rem; border-radius: 8px; font-weight: 500; transition: .15s; }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: var(--accent-dark); }
+        .btn-ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+        .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Section headings: "01 / About" style */
+        .eyebrow { font-family: 'IBM Plex Mono', monospace; color: var(--accent); font-size: .85rem; letter-spacing: .08em; }
+        .sec-title { font-size: 2.25rem; line-height: 1.2; }
+
+        /* News: bullet list with a date column */
+        .news li { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding: .7rem 0;
+                   border-bottom: 1px solid var(--line); line-height: 1.6; }
+        .news li:last-child { border-bottom: none; }
+        .news .date { font-family: 'IBM Plex Mono', monospace; font-size: .9rem; color: var(--accent);
+                      position: relative; padding-left: 1rem; white-space: nowrap; }
+        .news .date::before { content: ''; position: absolute; left: 0; top: .6rem; width: 6px; height: 6px;
+                              border-radius: 50%; background: var(--accent); }
+        @media (max-width: 640px) { .news li { grid-template-columns: 1fr; gap: .1rem; } }
+
+        .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+        .chip { display: inline-block; font-size: .8rem; padding: .2rem .6rem; border-radius: 999px;
+                background: var(--accent-soft); color: var(--accent-dark); }
+        .venue { font-family: 'IBM Plex Mono', monospace; font-size: .78rem; padding: .15rem .5rem; border-radius: 4px;
+                 background: var(--accent-soft); color: var(--accent-dark); border: 1px solid #d3e1de; white-space: nowrap; }
+        .icon { color: var(--accent); }
+        .tab { padding: .5rem 1rem; border-bottom: 2px solid transparent; color: var(--muted); font-weight: 500; }
+        .tab.active { color: var(--ink); border-color: var(--accent); }
+        .nav-link { color: var(--muted); font-size: .95rem; }
+        .nav-link:hover { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<!-- ====== Navigation ====== -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-line">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <a href="#top" class="flex items-center gap-2">
+            <span class="mono text-sm font-medium w-9 h-9 rounded-md grid place-items-center" style="background:var(--accent-soft);color:var(--accent-dark)">AB</span>
+            <span class="font-semibold" style="color:var(--ink)">Arunav Bordoloi</span>
+        </a>
+        <button id="menu-btn" class="lg:hidden text-xl" style="color:var(--ink)" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        <nav id="nav" class="hidden lg:flex gap-5">
+            <a class="nav-link" href="#about">About</a>
+            <a class="nav-link" href="#news">News</a>
+            <a class="nav-link" href="#research">Research</a>
+            <a class="nav-link" href="#publications">Publications</a>
+            <a class="nav-link" href="#talks">Talks</a>
+            <a class="nav-link" href="#cv">CV</a>
+        </nav>
+    </div>
+    <nav id="mobile-nav" class="lg:hidden hidden flex-col gap-2 px-4 pb-4">
+        <a class="nav-link" href="#about">About</a><a class="nav-link" href="#news">News</a>
+        <a class="nav-link" href="#research">Research</a><a class="nav-link" href="#publications">Publications</a>
+        <a class="nav-link" href="#talks">Talks</a><a class="nav-link" href="#cv">CV</a>
+    </nav>
+</header>
+
+<!-- ====== Hero ====== -->
+<section id="top" class="hero">
+    <div class="max-w-6xl mx-auto px-4 py-16 md:py-20 grid md:grid-cols-[1fr_auto] gap-12 items-center">
+        <div>
+            <p class="eyebrow mb-4">EXPERIMENTAL QUANTUM PHYSICS</p>
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">Arunav Bordoloi</h1>
+            <p class="text-lg muted">Postdoctoral Associate · Department of Physics &amp; Center for Quantum Information Physics</p>
+            <p class="text-lg muted mb-8">New York University</p>
+            <p class="text-xl max-w-2xl leading-relaxed mb-8" style="color:var(--ink)">
+                I build and measure hybrid superconductor–semiconductor quantum devices, from
+                flux-tunable transmon qubits to Cooper pair splitters that probe spin entanglement.
+            </p>
+            <div class="flex flex-wrap gap-3">
+                <a href="mailto:ab13024@nyu.edu" class="btn btn-primary"><i class="fa-solid fa-envelope"></i> ab13024@nyu.edu</a>
+                <!-- EDIT: replace with your Google Scholar profile URL -->
+                <a href="https://scholar.google.com/scholar?q=Arunav+Bordoloi" class="btn btn-ghost"><i class="fa-solid fa-graduation-cap"></i> Google Scholar</a>
+                <a href="files/cv.pdf" class="btn btn-ghost"><i class="fa-solid fa-file-lines"></i> CV</a>
+                <!-- Optional: add LinkedIn / ORCID / GitHub buttons here with class="btn btn-ghost" -->
+            </div>
+        </div>
+        <img src="images/profile.jpg" alt="Arunav Bordoloi" class="photo mx-auto">
+    </div>
+</section>
+
+<main class="max-w-6xl mx-auto px-4">
+
+<!-- ====== 01 About ====== -->
+<section id="about" class="py-20 grid lg:grid-cols-[2fr_1fr] gap-12">
+    <div>
+        <p class="eyebrow mb-2">01 / ABOUT</p>
+        <h2 class="sec-title font-bold mb-6">About me</h2>
+        <div class="space-y-4 text-lg leading-relaxed">
+            <p>I am a Postdoctoral Associate in the group of <strong>Prof. Javad Shabani</strong> at the
+               Center for Quantum Information Physics, <strong>New York University</strong>. My research is on hybrid
+               superconducting–semiconducting quantum systems, superconducting qubits and circuit quantum
+               electrodynamics, and mesoscopic quantum transport.</p>
+            <p>Before NYU, I was a Postdoctoral Associate with <strong>Prof. Vladimir Manucharyan</strong> at the
+               University of Maryland, College Park (2022–2025), where I developed strongly anharmonic, flux-tunable
+               transmons in InAs–Al two-dimensional heterostructures.</p>
+            <p>I received my Ph.D. in Physics from the <strong>University of Basel</strong>, Switzerland, with
+               <strong>Prof. Christian Schönenberger</strong>. My thesis was on spin projection and correlation
+               experiments in nanoelectronic devices, and it included spin cross-correlation experiments in a
+               Cooper pair splitter (<em>Nature</em>, 2022). Before that, I earned my B.S.–M.S. in Physical Sciences at
+               IISER Kolkata.</p>
+        </div>
+    </div>
+    <aside class="card p-6 self-start">
+        <h3 class="text-xl font-bold mb-4"><i class="fa-solid fa-award mr-2 icon"></i>Honors &amp; Awards</h3>
+        <ul class="space-y-3 text-sm">
+            <li><span class="mono text-xs muted block">2023</span>Swiss Nanotechnology PhD Award</li>
+            <li><span class="mono text-xs muted block">2023</span>Materials Physics: Highlights of 2023, Physics World (IOP)</li>
+            <li><span class="mono text-xs muted block">2019</span>Wilhelm and Else Heraeus-Stiftung Prize (Best Poster), Bad Honnef</li>
+            <li><span class="mono text-xs muted block">2014</span>Charpak Scholarship, Government of France</li>
+            <li><span class="mono text-xs muted block">2013</span>Summer Research Fellowship, Indian Academy of Sciences</li>
+            <li><span class="mono text-xs muted block">2011–2016</span>INSPIRE Fellowship, DST, India</li>
+        </ul>
+    </aside>
+</section>
+
+<!-- ====== 02 News (rendered from the "news" list in the script below) ====== -->
+<section id="news" class="py-20 border-t border-line">
+    <p class="eyebrow mb-2">02 / NEWS</p>
+    <h2 class="sec-title font-bold mb-8">News</h2>
+    <ul id="news-list" class="news max-w-4xl"></ul>
+    <button id="news-toggle" class="btn btn-ghost mt-6 text-sm"></button>
+    <div id="news-older-wrap" class="hidden mt-10">
+        <h3 class="text-2xl font-bold mb-3">Older news</h3>
+        <ul id="news-older" class="news max-w-4xl"></ul>
+    </div>
+</section>
+
+<!-- ====== 03 Research ====== -->
+<section id="research" class="py-20 border-t border-line">
+    <p class="eyebrow mb-2">03 / RESEARCH</p>
+    <h2 class="sec-title font-bold mb-4">Research</h2>
+    <p class="text-lg max-w-3xl mb-10">I use hybrid superconductor–semiconductor materials to build quantum
+        circuits whose properties can be tuned and engineered. My work spans qubit design, mesoscopic transport, and
+        materials development.</p>
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="card p-6">
+            <div class="text-2xl mb-3 icon"><i class="fa-solid fa-wave-square"></i></div>
+            <h3 class="text-xl font-bold mb-2">Hybrid superconducting qubits</h3>
+            <p class="text-sm leading-relaxed">Flux-tunable, strongly anharmonic transmons and gatemon-type qubits
+                built from InAs–Al 2D heterostructures. I use RF spectroscopy of Andreev bound states and
+                Fraunhofer-modulated modes in Josephson weak links.</p>
+        </div>
+        <div class="card p-6">
+            <div class="text-2xl mb-3 icon"><i class="fa-solid fa-arrows-split-up-and-left"></i></div>
+            <h3 class="text-xl font-bold mb-2">Spin correlations &amp; Cooper pair splitting</h3>
+            <p class="text-sm leading-relaxed">Spin-resolved current cross-correlations in Cooper pair splitters
+                built from InAs nanowire double quantum dots. I developed a double quantum dot spin valve to detect spin
+                projections, a step toward detecting entanglement in solid-state electron entanglers.</p>
+        </div>
+        <div class="card p-6">
+            <div class="text-2xl mb-3 icon"><i class="fa-solid fa-circle-nodes"></i></div>
+            <h3 class="text-xl font-bold mb-2">Josephson arrays &amp; quantum materials</h3>
+            <p class="text-sm leading-relaxed">Quantum phase transitions in Josephson junction arrays (e.g.
+                super-honeycomb lattices), crystalline group-IV Josephson junctions, and low-loss superconducting
+                resonators on III–V substrates.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ====== 04 Publications (rendered from the lists in the script below) ====== -->
+<section id="publications" class="py-20 border-t border-line">
+    <p class="eyebrow mb-2">04 / PUBLICATIONS</p>
+    <h2 class="sec-title font-bold mb-2">Publications</h2>
+    <p class="text-sm muted mb-10">* equal contribution &nbsp;·&nbsp; † corresponding author &nbsp;·&nbsp;
+        Full list on <a class="link" href="https://scholar.google.com/scholar?q=Arunav+Bordoloi">Google Scholar</a></p>
+
+    <div id="papers-list" class="space-y-5 mb-14"></div>
+
+    <h3 class="text-2xl font-bold mb-5">Manuscripts in preparation</h3>
+    <div id="inprep-list" class="space-y-5"></div>
+</section>
+
+<!-- ====== 05 Talks ====== -->
+<section id="talks" class="py-20 border-t border-line">
+    <p class="eyebrow mb-2">05 / TALKS</p>
+    <h2 class="sec-title font-bold mb-6">Invited &amp; contributed talks</h2>
+    <div class="flex border-b border-line mb-6">
+        <button class="tab active" data-tab="invited">Invited <span id="n-invited" class="mono text-xs"></span></button>
+        <button class="tab" data-tab="contributed">Contributed <span id="n-contributed" class="mono text-xs"></span></button>
+    </div>
+    <ul id="talk-list" class="divide-y max-w-4xl" style="border-color:var(--line)"></ul>
+</section>
+
+<!-- ====== 06 CV ====== -->
+<section id="cv" class="py-20 border-t border-line">
+    <div class="card p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6" style="background:var(--accent-soft);border-color:#d3e1de">
+        <div>
+            <p class="eyebrow mb-2">06 / CV</p>
+            <h2 class="sec-title font-bold mb-2">Curriculum Vitae</h2>
+            <p class="muted">A full PDF of my academic CV.</p>
+        </div>
+        <a href="files/cv.pdf" class="btn btn-primary self-start md:self-auto px-6 py-3"><i class="fa-solid fa-download"></i> Download CV (PDF)</a>
+    </div>
+</section>
+</main>
+
+<footer class="border-t border-line py-10">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between gap-4 text-sm muted">
+        <div>
+            <p class="font-semibold" style="color:var(--ink)">Arunav Bordoloi</p>
+            <p>Department of Physics, New York University<br>726 Broadway, Floor 10, New York, NY 10003</p>
+        </div>
+        <div class="md:text-right">
+            <p><a class="link" href="mailto:ab13024@nyu.edu">ab13024@nyu.edu</a></p>
+            <p>© <span id="year"></span> Arunav Bordoloi</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // ====== EDIT: news. Newest first. The first NEWS_SHOWN items are shown; the rest go under "Older news". ======
+    const NEWS_SHOWN = 9;
+    const news = [
+        ["Sep 2026", "I gave invited seminars at <strong>Columbia University</strong> (Quantum Materials Seminar) and the <strong>University of Wisconsin–Madison</strong> (R. G. Herb Condensed Matter Seminar)."],
+        ["Sep 2026", "Our preprint on the <a class='link' href='https://arxiv.org/abs/2609.13673'>effect of buried-interface preparation for Nb superconducting resonators on InP</a> is now on arXiv and under review at <em>ACS Applied Materials &amp; Interfaces</em>."],
+        ["Aug 2026", "Our preprint on a <a class='link' href='https://arxiv.org/abs/2608.08500'>crystalline group-IV Josephson junction</a> is now on arXiv and under review at <em>Nano Letters</em>."],
+        ["Jul 2026", "Our preprint reporting the <a class='link' href='https://arxiv.org/abs/2607.16500'>observation of a critical current minimum in super-honeycomb Josephson junction arrays</a> is now on arXiv and under review at <em>Physical Review Letters</em>."],
+        ["Jul 2026", "I am serving as Program Coordinator for the <strong>Summer Quantum Camp</strong> in New York City (July–August 2026)."],
+        ["Apr 2026", "I gave an invited seminar at the Center for Quantum Information Science and Engineering at <strong>Virginia Tech</strong>."],
+        ["Mar 2026", "I presented our work on hybrid InAs–Al Josephson architectures for exploring quantum phase transitions at the <strong>APS Global Physics Summit</strong> in Denver."],
+        ["Dec 2025", "Our paper on a <a class='link' href='https://doi.org/10.1038/s41467-025-67420-1'>strongly anharmonic flux-tunable transmon based on an InAs–Al 2D heterostructure</a> was published in <strong><em>Nature Communications</em></strong>."],
+        ["Jul 2025", "I served as Lead Instructor for the <strong>Summer Quantum Camp</strong> in New York City (July–August 2025)."],
+        // ---- older news ----
+        ["Mar 2025", "I joined the group of Prof. Javad Shabani at <strong>New York University</strong> as a Postdoctoral Associate."],
+        ["Mar 2025", "I presented a gateless gatemon qubit in a two-dimensional InAs–Al heterostructure at the <strong>APS Global Physics Summit</strong> in Anaheim."],
+        ["Jan 2025", "I gave an invited seminar at the Department of Physics, <strong>University of Chicago</strong>."],
+        ["Oct 2024", "I gave an invited seminar at the Center for Quantum Information Physics, <strong>New York University</strong>."],
+        ["Mar 2024", "I presented our progress towards RF spectroscopy of Andreev bound states in an InAs–Al 2DEG at the <strong>APS March Meeting</strong> in Minneapolis."],
+        ["2023", "I received the <strong>Swiss Nanotechnology PhD Award</strong>."],
+        ["2023", "Our work was featured in Physics World's <strong>Materials Physics: Highlights of 2023</strong>."],
+        ["May 2023", "I presented our spin cross-correlation experiments in semiconducting–superconducting heterostructures at the <strong>Quantum Matter Conference</strong> in Madrid."],
+        ["Apr 2023", "I gave a seminar on a double quantum dot spin valve at the <strong>Joint Quantum Institute</strong>, University of Maryland."],
+        ["Mar 2023", "I gave a seminar on spin cross-correlation experiments in a Cooper pair splitter at the <strong>Joint Quantum Institute</strong>, University of Maryland."],
+        ["Nov 2022", "Our paper <a class='link' href='https://doi.org/10.1038/s41586-022-05436-z'><em>Spin cross-correlation experiments in an electron entangler</em></a> was published in <strong><em>Nature</em></strong>."],
+        ["Mar 2022", "I joined the group of Prof. Vladimir Manucharyan at the <strong>University of Maryland</strong>, College Park, as a Postdoctoral Associate."],
+        ["Mar 2022", "I presented the observation of negative spin cross-correlation in a Cooper pair splitter at the <strong>APS March Meeting</strong> in Chicago."],
+        ["Oct 2021", "I gave an invited seminar on quantum dot spin valves and spin correlation experiments in a Cooper pair splitter at the Department of Physics, <strong>University of Rochester</strong> (virtual)."],
+        ["Sep 2021", "I gave an invited seminar at the Center for Quantum Information Physics, <strong>New York University</strong> (virtual)."],
+        ["Aug 2021", "I gave invited seminars at the Department of Physics, <strong>IST Austria</strong> in Vienna, and at <strong>Purdue University</strong> (virtual)."],
+        ["Jul 2021", "I gave an invited seminar at the Department of Physics, <strong>University of Pittsburgh</strong> (virtual)."],
+        ["Jun 2021", "I presented negative spin current correlations in a Cooper pair splitter at the Joint Annual Meeting of the <strong>Swiss and Austrian Physical Societies</strong> in Innsbruck."],
+        ["Apr 2021", "I presented our Cooper pair splitter results at the <strong>IOP Bound States in Hybrid Superconductor Nanostructures</strong> conference (virtual), and a poster on spin control with ferromagnetic sidegates at the NCCR SPIN Annual Meeting in Pontresina."],
+        ["Feb 2021", "I started a Bridging Postdoc at the <strong>University of Basel</strong>."],
+        ["Jan 2021", "I completed my <strong>Ph.D. in Physics</strong> at the University of Basel under the supervision of Prof. Christian Schönenberger."],
+        ["Nov 2020", "I gave an invited talk on a double quantum dot spin valve at the <strong>Young Research Leaders Group Workshop</strong> in Mainz."],
+        ["Aug 2020", "I presented our double quantum dot spin valve at <strong>CMD2020GEFES</strong>, the European Physical Society's condensed matter conference (virtual)."],
+        ["Aug 2020", "My first paper, <a class='link' href='https://doi.org/10.1038/s42005-020-00405-2'><em>A double quantum dot spin valve</em></a>, was published in <strong><em>Communications Physics</em></strong>."],
+    ];
+
+    // ====== EDIT: publications. "me" = your name as it appears in author lists (gets bolded). ======
+    // "papers" is shown newest first in the order written here. "link" = publisher page (DOI) or arXiv.
+    const me = "A. Bordoloi";
+    const papers = [
+        { title: "Effect of Buried-Interface Preparation for Nb Superconducting Resonators on InP",
+          authors: "L.S. Kusher, D. Peng, Z. Zhu, A. Bordoloi, A. Leblanc, L.J. Baker, N. Adnan, J. Issokson, A. Wang, F. Knudsen, K. Dindial, M. Mikalsen, T. Kaleem, A. Vrajitoarea, Y. Du, P.J. Strohbeen, J. Shabani",
+          venue: "arXiv:2609.13673", note: "in review, ACS Applied Materials & Interfaces", year: 2026,
+          link: "https://arxiv.org/abs/2609.13673" },
+        { title: "Crystalline Group-IV Josephson Junction",
+          authors: "F.H. Knudsen, A. Leblanc, P.J. Strohbeen, J. van Dijk, Y. Li, L. Kusher, A. Bordoloi, A. Danilenko, X. Ma, S. Salmani-Rezaie, J. Shabani",
+          venue: "arXiv:2608.08500", note: "in review, Nano Letters", year: 2026,
+          link: "https://arxiv.org/abs/2608.08500" },
+        { title: "Observation of Critical Current Minimum in Super-Honeycomb Josephson Junction Arrays",
+          authors: "M. Mikalsen, A.G. Penner, S.D. Escribano, N. Drechsler, A. Bordoloi, J. Issokson, F.V. Oppen, Y. Oreg, J. Shabani",
+          venue: "arXiv:2607.16500", note: "in review, Physical Review Letters", year: 2026,
+          link: "https://arxiv.org/abs/2607.16500" },
+        { title: "Strongly anharmonic flux-tunable transmon based on InAs-Al 2D heterostructure",
+          authors: "S. Liu*, A. Bordoloi*,†, J. Issokson, I. Levy, M.G. Vavilov, J. Shabani, V.E. Manucharyan",
+          venue: "Nature Communications", note: "17, 740", year: 2025,
+          link: "https://doi.org/10.1038/s41467-025-67420-1" },
+        { title: "Spin cross-correlation experiments in an electron entangler",
+          authors: "A. Bordoloi†, V. Zannier, L. Sorba, C. Schönenberger, A. Baumgartner",
+          venue: "Nature", note: "612, 454–458", year: 2022,
+          link: "https://doi.org/10.1038/s41586-022-05436-z" },
+        { title: "A double quantum dot spin valve",
+          authors: "A. Bordoloi†, V. Zannier, L. Sorba, C. Schönenberger, A. Baumgartner",
+          venue: "Communications Physics", note: "3, 135", year: 2020,
+          link: "https://doi.org/10.1038/s42005-020-00405-2" },
+    ];
+    const inPrep = [
+        { title: "Qubit spectroscopy of the Fraunhofer-modulated modes in InAs 2DEG Josephson weak links",
+          authors: "S. Liu, A. Bordoloi, M.G. Vavilov, J. Shabani, J. Issokson, V.E. Manucharyan, K. Sardashti" },
+    ];
+
+    // ====== EDIT: talks ======
+    const talks = {
+        invited: [
+            ["Strongly anharmonic flux-tunable transmon based on InAs-Al two dimensional heterostructure", "Quantum Materials Seminar, Columbia University, New York, USA", "Sep 2026"],
+            ["Strongly anharmonic flux-tunable transmon based on InAs-Al two dimensional heterostructure", "R. G. Herb Condensed Matter Seminar, University of Wisconsin–Madison, USA", "Sep 2026"],
+            ["Strongly anharmonic flux-tunable transmon based on InAs-Al two-dimensional heterostructure", "Center for Quantum Information Science and Engineering Seminar, Virginia Tech, USA", "Apr 2026"],
+            ["Flux tunable qubits and spin cross-correlations experiments in superconductor–semiconductor heterostructures", "Department of Physics Seminar, University of Chicago, USA", "Jan 2025"],
+            ["Flux tunable qubits and quantum correlations in superconductor–semiconductor hybrid heterostructures", "Center for Quantum Information Physics Seminar, New York University, USA", "Oct 2024"],
+            ["Quantum Dot Spin Valves and Spin Correlation Experiments in Cooper Pair Splitter", "Department of Physics Seminar, University of Rochester, USA (virtual)", "Oct 2021"],
+            ["Quantum Dot Spin Valves and Spin Correlation Experiments in Cooper Pair Splitter", "Center for Quantum Information Physics Seminar, New York University, USA (virtual)", "Sep 2021"],
+            ["Quantum Dot Spin Valves and Spin Correlation Experiments in Cooper Pair Splitter", "Department of Physics Seminar, IST Austria, Vienna", "Aug 2021"],
+            ["Quantum Dot Spin Valves and Spin Correlation Experiments in Cooper Pair Splitter", "Department of Physics Seminar, Purdue University, USA (virtual)", "Aug 2021"],
+            ["Quantum Dot Spin Valves and Spin Correlation Experiments in Cooper Pair Splitter", "Department of Physics Seminar, University of Pittsburgh, USA (virtual)", "Jul 2021"],
+            ["A Double Quantum Dot Spin Valve", "Young Research Leaders Group Workshop, Mainz, Germany", "Nov 2020"],
+        ],
+        contributed: [
+            ["Hybrid InAs–Al Josephson Architectures for Exploring Quantum Phase Transitions", "APS Global Physics Summit, Denver, USA", "Mar 2026"],
+            ["Gateless Gatemon Qubit in a Two-dimensional InAs-Al heterostructure", "APS Global Physics Summit, Anaheim, USA", "Mar 2025"],
+            ["Towards RF spectroscopy of Andreev bound states in an InAs-Al 2DEG", "APS March Meeting, Minneapolis, USA", "Mar 2024"],
+            ["Spin Cross-Correlation Experiments in Semiconducting–Superconducting Heterostructures", "Quantum Matter Conference, Madrid, Spain", "May 2023"],
+            ["A Double Quantum Dot Spin Valve", "Joint Quantum Institute (JQI) Seminar, University of Maryland, College Park, USA", "Apr 2023"],
+            ["Spin Cross-Correlation Experiments in a Cooper Pair Splitter", "Joint Quantum Institute (JQI) Seminar, University of Maryland, College Park, USA", "Mar 2023"],
+            ["Negative Spin Cross-Correlation in a Cooper Pair Splitter", "APS March Meeting, Chicago, USA", "Mar 2022"],
+            ["Negative Spin Current Correlation in a Cooper Pair Splitter", "Joint Annual Meeting of the Swiss and Austrian Physical Societies, Innsbruck, Austria", "Jun 2021"],
+            ["Negative Spin Current Correlation in a Cooper Pair Splitter", "IOP Bound States in Hybrid Superconductor Nanostructures Conference, UK (virtual)", "Apr 2021"],
+            ["Spin (Current) Control in Nanowire Devices with Ferromagnetic Sidegates (poster)", "NCCR SPIN Annual Meeting, Swiss National Science Foundation, Pontresina, Switzerland", "Apr 2021"],
+            ["A Double Quantum Dot Spin Valve", "CMD2020GEFES, European Physical Society, UK (virtual)", "Aug 2020"],
+            ["A Double Quantum Dot Spin Valve", "QSIT Lunch Seminar, ETH Zurich, Switzerland", "May 2020"],
+            ["Double Quantum Dot Tunneling Magnetoresistance without Ferromagnetic Contacts", "One Dimensional Systems for Quantum Technology Conference, Germany", "Jul 2019"],
+            ["Towards Synthetic Spin-Orbit Interaction in InAs Nanowires using Ferromagnetic Sidegates", "\"Transport in Nanostructures\" Summer School, Capri, Italy", "May 2017"],
+        ],
+    };
+
+    // ---------- rendering (no need to edit below) ----------
+    const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    const scholar = t => "https://scholar.google.com/scholar?q=" + encodeURIComponent(t);
+
+    const newsItem = ([when, text]) => `<li><span class="date">${when}</span><span>${text}</span></li>`;
+    document.getElementById("news-list").innerHTML = news.slice(0, NEWS_SHOWN).map(newsItem).join("");
+    document.getElementById("news-older").innerHTML = news.slice(NEWS_SHOWN).map(newsItem).join("");
+    const newsToggle = document.getElementById("news-toggle");
+    const olderWrap = document.getElementById("news-older-wrap");
+    const olderCount = news.length - NEWS_SHOWN;
+    function setNewsLabel() {
+        const open = !olderWrap.classList.contains("hidden");
+        newsToggle.innerHTML = open ? `<i class="fa-solid fa-chevron-up"></i> Hide older news`
+                                    : `<i class="fa-solid fa-chevron-down"></i> Older news (${olderCount})`;
+    }
+    if (olderCount > 0) {
+        newsToggle.onclick = () => { olderWrap.classList.toggle("hidden"); setNewsLabel(); };
+        setNewsLabel();
+    } else newsToggle.remove();
+
+    function pubHTML(p) {
+        const authors = esc(p.authors).replace(me, `<strong style="color:var(--ink)">${me}</strong>`);
+        const link = p.link || scholar(p.title);
+        return `
+        <article class="card p-5 md:p-6 grid md:grid-cols-[110px_1fr] gap-3 md:gap-4">
+            <div class="mono text-2xl font-medium" style="color:#b5bdb9">${p.year ?? "—"}</div>
+            <div>
+                <a href="${link}" class="text-lg font-semibold leading-snug hover:underline" style="color:var(--ink)">${esc(p.title)}</a>
+                <p class="text-sm mt-1 muted">${authors}</p>
+                <div class="flex flex-wrap items-center gap-2 mt-3 text-sm">
+                    <span class="venue">${esc(p.venue || "In preparation")}</span>
+                    ${p.note ? `<span class="muted">${esc(p.note)}</span>` : ""}
+                </div>
+            </div>
+        </article>`;
+    }
+    document.getElementById("papers-list").innerHTML = papers.map(pubHTML).join("");
+    document.getElementById("inprep-list").innerHTML = inPrep.map(pubHTML).join("");
+
+    function renderTalks(kind) {
+        document.getElementById("talk-list").innerHTML = talks[kind].map(([title, where, when]) => `
+            <li class="py-4 grid sm:grid-cols-[100px_1fr] gap-1 sm:gap-4" style="border-color:var(--line)">
+                <span class="mono text-sm" style="color:var(--accent)">${when}</span>
+                <div><p class="font-medium" style="color:var(--ink)">“${esc(title)}”</p>
+                     <p class="text-sm muted">${esc(where)}</p></div>
+            </li>`).join("");
+        document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === kind));
+    }
+    document.querySelectorAll(".tab").forEach(t => t.onclick = () => renderTalks(t.dataset.tab));
+    document.getElementById("n-invited").textContent = `(${talks.invited.length})`;
+    document.getElementById("n-contributed").textContent = `(${talks.contributed.length})`;
+    renderTalks("invited");
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById("menu-btn").onclick = () => {
+        const m = document.getElementById("mobile-nav");
+        m.classList.toggle("hidden"); m.classList.toggle("flex");
+    };
+    document.querySelectorAll("#mobile-nav a").forEach(a => a.onclick = () => document.getElementById("menu-btn").click());
+</script>
+</body>
+</html>
