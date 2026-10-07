@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Page moved | Arunav Bordoloi</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <style>
+        body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f7f6f2;
+               color: #3f4852; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; text-align: center; padding: 16px; }
+        h1 { font-family: Georgia, serif; color: #2f3b45; margin: 0 0 .5rem; }
+        a { color: #4a7a74; }
+    </style>
+    <script>
+        // The old site had separate pages (/publications/, /talks/, /cv/ ...). Send visitors to the matching section.
+        const p = location.pathname.toLowerCase();
+        const section = p.includes("publication") ? "#publications"
+                      : p.includes("talk") ? "#talks"
+                      : p.includes("cv") ? "#cv"
+                      : p.includes("research") || p.includes("portfolio") ? "#research"
+                      : "";
+        setTimeout(() => location.replace("/" + section), 1500);
+    </script>
+</head>
+<body>
+    <main>
+        <h1>This page has moved</h1>
+        <p>Taking you to the homepage… or <a href="/">click here</a>.</p>
+    </main>
+</body>
+</html>
