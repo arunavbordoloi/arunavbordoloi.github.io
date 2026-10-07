@@ -503,8 +503,12 @@
     document.getElementById("n-contributed").textContent = `(${talks.contributed.length})`;
     renderTalks("invited");
 
+    // ====== EDIT: after replacing the CV PDF, change this date so browsers fetch the new file instead of a cached copy ======
+    const CV_VERSION = "2026-10-07";
+    const CV_URL = "files/Academic_CV_Arunav_Bordoloi.pdf?v=" + CV_VERSION;
+    document.querySelectorAll('a[href^="files/Academic_CV_Arunav_Bordoloi.pdf"]').forEach(a => a.setAttribute("href", CV_URL));
+
     // CV viewer: load PDF.js only when the CV section is close to the screen, then draw each page.
-    const CV_URL = "files/Academic_CV_Arunav_Bordoloi.pdf";
     const PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
     const cvViewer = document.getElementById("cv-viewer");
     let cvPdf = null, cvWidth = 0;
